@@ -1,0 +1,3 @@
+## Todolist
+
+This todolist looks horrible as I didn't really get the hang of the styling just yet. Works as it was supposed to though...

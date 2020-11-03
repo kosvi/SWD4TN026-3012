@@ -1,11 +1,11 @@
 # Front end -ohjelmointi / SWD4TN026-3012
 
-** Exercises **
+## Exercises
 
 - Create React App
-  - [ ] [E12](/Todo) / [README](/Todo/README.md) Todolist
-  - [ ] [E13](/Todo2) / [README](/Todo2/README.md) Todolist with delete
-  - [ ] [E14](/SeparateComponents) / [README](/SeparateComponents/README.md) Separate Components
-  - [ ] [E15](/Context) / [README](/Context/README.md) Context
+  - [x] [E12](/todo) / [README](/todo/README.md) Todolist
+  - [ ] [E13](/todo2) / [README](/todo2/README.md) Todolist with delete
+  - [ ] [E14](/separatecomponents) / [README](/separatecomponents/README.md) Separate Components
+  - [ ] [E15](/context) / [README](/context/README.md) Context
 - GraphQL
   - [ ] [E16]() / [README]() ...

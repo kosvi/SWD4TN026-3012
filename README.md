@@ -4,7 +4,7 @@
 
 - Create React App
   - [x] [E12](/todo) / [README](/todo/README.md) Todolist
-  - [ ] [E13](/todo2) / [README](/todo2/README.md) Todolist with delete
+  - [x] [E13](/todo2) / [README](/todo2/README.md) Todolist with delete
   - [ ] [E14](/separatecomponents) / [README](/separatecomponents/README.md) Separate Components
   - [ ] [E15](/context) / [README](/context/README.md) Context
 - GraphQL

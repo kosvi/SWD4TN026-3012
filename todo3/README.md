@@ -1,0 +1,3 @@
+## Todolist with delete and separate components
+
+I hope this is what it was supposed to be. At least they are in two different components...

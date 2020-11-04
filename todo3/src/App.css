@@ -1,0 +1,24 @@
+.Header {
+  position: relative;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  min-height: 2em;
+  line-height: 3em;
+  font-size: 2em;
+  background-color: black;
+  color: antiquewhite;
+}
+
+.Content {
+  position: relative;
+  color: black;
+  font-size: 1.1em;
+  margin-top: 1em;
+  padding: 1em;
+  text-align: center;
+}

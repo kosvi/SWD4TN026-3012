@@ -1,0 +1,19 @@
+.header {
+  background-color: black;
+  color: white;
+  padding: 2em;
+  text-align: center;
+  font-size: 2em;
+}
+
+.menu {
+  text-align: center;
+}
+
+.menu a {
+  padding: 0.4em;
+}
+
+.content {
+  text-align: center;
+}

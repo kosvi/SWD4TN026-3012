@@ -13,4 +13,4 @@
 - 3rd party components
   - [x] [E18](/todo4) / [README](/todo4/README.md) Ag-grid
 - React router
-  - [ ] [E19](/) / [README](//README.md) React router
+  - [x] [E19](/router) / [README](/router/README.md) React router

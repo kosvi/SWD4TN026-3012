@@ -16,4 +16,4 @@
   - [x] [E19](/router) / [README](/router/README.md) React router
 - Material-UI
   - [x] [E20](/todo5) / [README](/todo5/README.md) Material-UI picker
-  - [ ] [E21](/menu) / [README](/menu/README.md) Menu
+  - [x] [E21](/todo6) / [README](/todo6/README.md) Menu

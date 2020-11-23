@@ -17,3 +17,6 @@
 - Material-UI
   - [x] [E20](/todo5) / [README](/todo5/README.md) Material-UI picker
   - [x] [E21](/todo6) / [README](/todo6/README.md) Menu
+- Testing
+  - [x] [E22](/todoteststarter) Testing
+  - [x] [E23](/todoteststarter) Clear todos

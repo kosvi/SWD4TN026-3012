@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 
+import { ServerAPI } from "../classes/ServerAPI.js";
 import styles from "../styles/form.module.css";
 import { fuels } from "../config/fuels.js";
 import Loading from "./Loading.js";
@@ -29,39 +31,29 @@ export default function AddCarForm() {
         setCar({ ...car, [event.target.name]: num });
     }
 
+    const resetForm = () => {
+        setCar({
+            brand: '',
+            model: '',
+            color: '',
+            fuel: '',
+            year: 0,
+            price: 0,
+        });
+    }
+
     const submitTheCar = async () => {
         setLoading(true);
-        try {
-            const response = await fetch('http://carrestapi.herokuapp.com/cars', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'Application/json',
-                },
-                body: JSON.stringify({
-                    brand: car.brand,
-                    model: car.model,
-                    color: car.color,
-                    fuel: car.fuel,
-                    year: car.year,
-                    price: car.price,
-                })
-            });
-        } catch (error) {
-            console.log(error);
-        }
+        let success = await ServerAPI.postCar(car);
+        // if success = 0 -> success 
+        //   show a message telling that to the user
+        // if success != 0 -> fail (also tell that!)
+        resetForm();
         setLoading(false);
     }
 
-    if (loading) {
-        return (
-            <div>
-                <Loading message="Saving car" />
-            </div>
-        )
-    }
-
     return (
-        <div>
+        <div className={styles.carSubmitDiv}>
             <fieldset className={styles.formFieldset}>
                 <legend>Add a car</legend>
                 <p><TextField name="brand" label="Brand" onChange={onChangeTextInput} value={car.brand} variant="outlined" /></p>
@@ -78,11 +70,21 @@ export default function AddCarForm() {
                 </p>
                 <p><TextField name="year" label="Year" onChange={onChangeNumberInput} value={car.year} variant="outlined" type="number" /></p>
                 <p><TextField name="price" label="Price" onChange={onChangeNumberInput} value={car.price} variant="outlined" type="number" /></p>
-                <p className={styles.alignRight}>
-                    <Button onClick={submitTheCar} variant="outlined" color="primary" startIcon={<SaveIcon />}>
-                        Save
-                    </Button>
-                </p>
+                {loading ?
+                    (<div className={styles.loadingIcon}>
+                        <Loading />
+                    </div>
+                    ) :
+                    (<div className={styles.spaceBetween}>
+                        <Button onClick={resetForm} variant="outlined" color="secondary" startIcon={<CancelIcon />}>
+                            Reset
+                        </Button>
+                        <Button onClick={submitTheCar} variant="outlined" color="primary" startIcon={<SaveIcon />}>
+                            Save
+                        </Button>
+                    </div>
+                    )
+                }
             </fieldset>
         </div>
     )

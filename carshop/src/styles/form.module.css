@@ -4,6 +4,11 @@
     text-align: left;
 }
 
+.spaceBetween {
+    display: flex;
+    justify-content: space-between;
+}
+
 .alignRight {
     text-align: right;
 }
@@ -11,4 +16,15 @@
 .formRow {
     display: block;
     padding: 1em;
+}
+
+.carSubmitDiv {
+/*    background-color: antiquewhite; */
+    min-width: 300px;
+    border-radius: 0.5em;
+}
+
+.loadingIcon {
+    color: black;
+    text-align: center;
 }

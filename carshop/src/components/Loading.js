@@ -13,7 +13,7 @@ export default function Loading(props) {
     }
     return (
         <div>
-            <ThreeDots />
+            <ThreeDots stroke="#000000" />
         </div>
     )
 }

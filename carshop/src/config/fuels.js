@@ -15,4 +15,8 @@ export const fuels = [
         value: "Electric",
         label: "Electric",
     },
+    {
+        value: "Hybrid",
+        label: "Hybrid",
+    },
 ]

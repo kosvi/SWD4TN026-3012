@@ -3,6 +3,10 @@ import { fuels } from "../config/fuels.js";
 
 export class ServerAPI {
     static async postCar(car) {
+        if (!ServerAPI.checkIfCarIsOk(car)) {
+            // car is not a valid car
+            return false;
+        }
         try {
             const response = await fetch(serverSettings.urlBase, {
                 method: 'POST',
@@ -56,6 +60,10 @@ export class ServerAPI {
     }
 
     static async updateCar(id, car) {
+        if (!ServerAPI.checkIfCarIsOk(car)) {
+            // car is not a valid car
+            return false;
+        }
         try {
             const response = await fetch(serverSettings.urlBase + "/" + id, {
                 method: 'PUT',

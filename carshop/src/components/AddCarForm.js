@@ -10,7 +10,7 @@ import styles from "../styles/form.module.css";
 import { fuels } from "../config/fuels.js";
 import Loading from "./Loading.js";
 
-export default function AddCarForm() {
+export default function AddCarForm(props) {
 
     const [loading, setLoading] = useState(false);
     const [car, setCar] = useState({
@@ -55,6 +55,11 @@ export default function AddCarForm() {
     return (
         <div className={styles.carSubmitDiv}>
             <fieldset className={styles.formFieldset}>
+                <div className={styles.alignRight}>
+                    <Button onClick={props.closeMethod}>
+                        Close
+                    </Button>
+                </div>
                 <legend>Add a car</legend>
                 <p><TextField name="brand" label="Brand" onChange={onChangeTextInput} value={car.brand} variant="outlined" /></p>
                 <p><TextField name="model" label="Model" onChange={onChangeTextInput} value={car.model} variant="outlined" /></p>

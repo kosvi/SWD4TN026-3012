@@ -6,13 +6,15 @@ import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 import { ServerAPI } from "../classes/ServerAPI.js";
-import styles from "../styles/form.module.css";
+import styles from "../styles/AddCarForm.module.css";
 import { fuels } from "../config/fuels.js";
 import Loading from "./Loading.js";
 
 export default function AddCarForm(props) {
 
     const [loading, setLoading] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
+    const [message, setMessage] = useState('');
     const [car, setCar] = useState({
         brand: '',
         model: '',
@@ -24,11 +26,13 @@ export default function AddCarForm(props) {
 
     const onChangeTextInput = (event) => {
         setCar({ ...car, [event.target.name]: event.target.value });
+        setShowMessage(false);
     }
 
     const onChangeNumberInput = (event) => {
         let num = parseInt(event.target.value);
         setCar({ ...car, [event.target.name]: num });
+        setShowMessage(false);
     }
 
     const resetForm = () => {
@@ -47,7 +51,15 @@ export default function AddCarForm(props) {
         let success = await ServerAPI.postCar(car);
         // if success = 0 -> success 
         //   show a message telling that to the user
+        if (success) {
+            setMessage("Car added succesfully!");
+            setShowMessage(true);
+        }
         // if success != 0 -> fail (also tell that!)
+        else {
+            setMessage("Failed to add car!");
+            setShowMessage(true);
+        }
         resetForm();
         setLoading(false);
     }
@@ -90,6 +102,12 @@ export default function AddCarForm(props) {
                     </div>
                     )
                 }
+                {showMessage ?
+                    (<div className={styles.message}>
+                        {message}
+                    </div>
+                    ) :
+                    ""}
             </fieldset>
         </div>
     )

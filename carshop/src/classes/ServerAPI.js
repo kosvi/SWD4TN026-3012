@@ -45,6 +45,8 @@ export class ServerAPI {
     }
 
     static async deleteCar(id) {
+        console.log(serverSettings.urlBase + "/" + id);
+        return true;
         try {
             const response = await fetch(serverSettings.urlBase + "/" + id, {
                 method: 'DELETE',

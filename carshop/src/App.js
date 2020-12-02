@@ -23,8 +23,11 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <ListCars />
-      {addFormIsOpen && <AddCarForm closeMethod={closeAddForm}/>}
+      <div style={{minWidth: "1250px", width: "80%", marginLeft: "auto", marginRight: "auto"}}>
+        <ListCars height="800px" width="100%" />
+        </div>
+      {addFormIsOpen && <AddCarForm closeMethod={closeAddForm} />}
+      <Loading message="foo" />
     </div>
   );
 }

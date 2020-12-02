@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
+import Button from "@material-ui/core/Button";
 import { AgGridReact } from "ag-grid-react";
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -7,10 +8,11 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Loading from "./Loading.js";
 import { ServerAPI } from "../classes/ServerAPI.js";
 
-export default function ListCars() {
+export default function ListCars(props) {
 
     const [loading, setLoading] = useState(true);
     const [cars, setCars] = useState([]);
+    const gridRef = useRef();
 
     const columns = [
         { headerName: "Brand", field: "brand", sortable: true, filter: true, floatingFilter: true },
@@ -34,6 +36,20 @@ export default function ListCars() {
         setLoading(false);
     }
 
+    const deleteCars = () => {
+        const amountSelected = gridRef.current.getSelectedNodes().length;
+        if(amountSelected>0) {
+            if(window.confirm("Are you sure you want to delete " + amountSelected + " cars?")) {
+                // ok, user wants to delete these cars
+                for(let i = 0;i<amountSelected;i++) {
+                    let id = gridRef.current.getSelectedNodes()[i].childIndex;
+                    setCars(cars.filter((car, index) => index !== id));
+                    ServerAPI.deleteCar(id);
+                }
+            }
+        }
+    }
+
     if (loading) {
         return (
             <Loading />
@@ -42,8 +58,9 @@ export default function ListCars() {
 
     return (
         <div>
-            <div className="ag-theme-material" style={{ height: '800px', width: '70%', margin: 'auto' }}>
-                <AgGridReact animateRows='true' columnDefs={columns} rowData={cars}>
+            <Button onClick={deleteCars} variant="outlined" color="primary">Delete</Button>
+            <div className="ag-theme-material" style={{ height: props.height, width: props.width, margin: 'auto' }}>
+                <AgGridReact animateRows='true' ref={gridRef} onGridReady={params => gridRef.current = params.api} rowSelection="multiple" columnDefs={columns} rowData={cars}>
                 </AgGridReact>
             </div>
         </div>

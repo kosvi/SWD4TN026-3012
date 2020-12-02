@@ -1,13 +1,14 @@
 import React from 'react';
-import { ThreeDots, SpinningCircles } from 'svg-loaders-react';
+// https://www.npmjs.com/package/svg-loaders-react
+import { ThreeDots, Bars } from 'svg-loaders-react';
 
 export default function Loading(props) {
 
     if (props.message) {
         return (
             <div>
-                <p>{props.message}</p>
-                <SpinningCircles />
+                <p style={{fontSize: "2em"}}>{props.message}</p>
+                <Bars stroke="#000000" />
             </div>
         )
     }

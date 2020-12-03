@@ -1,5 +1,4 @@
 import { serverSettings } from "../config/serverSettings.js";
-import { fuels } from "../config/fuels.js";
 
 export class ServerAPI {
     static async postCar(car) {
@@ -44,11 +43,10 @@ export class ServerAPI {
         }
     }
 
-    static async deleteCar(id) {
-        console.log(serverSettings.urlBase + "/" + id);
-        return true;
+    static async deleteCar(car) {
+        console.log("Deleting: " + car._links.self.href);
         try {
-            const response = await fetch(serverSettings.urlBase + "/" + id, {
+            const response = await fetch(car._links.self.href, {
                 method: 'DELETE',
                 headers: {
                     'Content-type': 'application/json',
@@ -61,15 +59,16 @@ export class ServerAPI {
         }
     }
 
-    static async updateCar(id, car) {
+    static async updateCar(car) {
         if (!ServerAPI.checkIfCarIsOk(car)) {
             // car is not a valid car
+            console.log("not a valid car");
             return false;
         }
         try {
-            const response = await fetch(serverSettings.urlBase + "/" + id, {
+            const response = await fetch(car._links.self.href, {
                 method: 'PUT',
-                header: {
+                headers: {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify(car),

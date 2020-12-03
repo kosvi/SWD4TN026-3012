@@ -1,18 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
 
-import React, { useState } from "react";
+import React from "react";
 
-import Loading from "./components/Loading.js";
 import AddCarForm from "./components/AddCarForm.js";
 import ListCars from "./components/ListCars.js";
+import EditCarForm from "./components/EditCarForm.js";
 
 function App() {
 
-  const [addFormIsOpen, setAddFormIsOpen] = React.useState(true);
+  const [addFormIsOpen, setAddFormIsOpen] = React.useState(false);
+  const [carInEditing, setCarInEditing] = React.useState(null);
 
-  const closeAddForm = () => {
+  const toggleAddForm = () => {
+    setAddFormIsOpen(!addFormIsOpen);
+    setCarInEditing(null);
+  }
+
+  const openEditForm = (car) => {
+    console.log(car);
+    setCarInEditing(car);
     setAddFormIsOpen(false);
+  }
+
+  const closeEditForm = () => {
+    setCarInEditing(null);
   }
 
   React.useEffect(() => {
@@ -20,14 +31,13 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      <div style={{minWidth: "1250px", width: "80%", marginLeft: "auto", marginRight: "auto"}}>
-        <ListCars height="800px" width="100%" />
-        </div>
-      {addFormIsOpen && <AddCarForm closeMethod={closeAddForm} />}
-      <Loading message="foo" />
+      <div style={{ minWidth: "1250px", width: "1%", height: "100vh", marginLeft: "auto", marginRight: "auto" }}>
+        <ListCars height="95%" width="100%" pageSize="10" addMethod={toggleAddForm} editMethod={openEditForm} />
+      </div>
+      <div style={{ position: "absolute", top: "0", left: "0" }}>
+        {addFormIsOpen && <AddCarForm closeMethod={toggleAddForm} />}
+        {carInEditing != null && <EditCarForm car={carInEditing} closeMethod={closeEditForm} />}
+      </div>
     </div>
   );
 }

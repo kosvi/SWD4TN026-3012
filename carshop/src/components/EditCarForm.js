@@ -7,11 +7,11 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { formSettings } from "../config/formSettings.js";
 
 import { ServerAPI } from "../classes/ServerAPI.js";
-import styles from "../styles/AddCarForm.module.css";
+import styles from "../styles/EditCarForm.module.css";
 import { fuels } from "../config/fuels.js";
 import Loading from "./Loading.js";
 
-export default function AddCarForm(props) {
+export default function EditCarForm(props) {
 
     const [loading, setLoading] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
@@ -25,6 +25,10 @@ export default function AddCarForm(props) {
         price: 0,
     });
 
+    React.useEffect(() => {
+        setCar(props.car);
+    }, []);
+
     const onChangeTextInput = (event) => {
         setCar({ ...car, [event.target.name]: event.target.value });
         setShowMessage(false);
@@ -36,33 +40,30 @@ export default function AddCarForm(props) {
         setShowMessage(false);
     }
 
-    const resetForm = () => {
-        setCar({
-            brand: '',
-            model: '',
-            color: '',
-            fuel: '',
-            year: 0,
-            price: 0,
-        });
-    }
-
     const submitTheCar = async () => {
         setLoading(true);
-        let success = await ServerAPI.postCar(car);
-        // if success = 0 -> success 
+        let success = await ServerAPI.updateCar(car);
+        // if success = true-> success 
         //   show a message telling that to the user
         if (success) {
-            setMessage("Car added succesfully!");
+            setMessage("Car updated succesfully!");
             setShowMessage(true);
         }
-        // if success != 0 -> fail (also tell that!)
+        // if success != true -> fail (also tell that!)
         else {
-            setMessage("Failed to add car!");
+            setMessage("Failed to update car!");
             setShowMessage(true);
         }
-        resetForm();
         setLoading(false);
+    }
+
+    const resetForm = async () => {
+        const pieces = car._links.self.href.split("/cars/");
+        const id = pieces[1];
+        const response = await ServerAPI.getSingleCar(id);
+        if (response != null) {
+            setCar(response);
+        }
     }
 
     return (
@@ -73,7 +74,7 @@ export default function AddCarForm(props) {
                         Close
                     </Button>
                 </div>
-                <legend>Add a car</legend>
+                <legend>Edit a car</legend>
                 <p><TextField name="brand" label="Brand" onChange={onChangeTextInput} value={car.brand} variant={formSettings.variant} /></p>
                 <p><TextField name="model" label="Model" onChange={onChangeTextInput} value={car.model} variant={formSettings.variant} /></p>
                 <p><TextField name="color" label="Color" onChange={onChangeTextInput} value={car.color} variant={formSettings.variant} /></p>

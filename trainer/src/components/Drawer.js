@@ -59,6 +59,7 @@ export function Drawer(props) {
             transition: "all 0.3s ease-in-out",
             transform: "translate(" + toggleWidth + ")",
             position: "fixed",
+            left: "0",
             height: "100vh",
             marginTop: drawerConfig.titleHeight,
             zIndex: "9",

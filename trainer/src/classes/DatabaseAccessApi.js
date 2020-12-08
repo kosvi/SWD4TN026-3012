@@ -16,6 +16,19 @@ export class DatabaseAccessApi {
         return responseJson;
     }
 
+    static async getCustomerByUrl(url) {
+        const responseJson = await InternalMethods.getData(url);
+        return responseJson;
+    }
+
+    static async updateCustomerByCustomer(customer) {
+        if (DatabaseObjectMethods.Validate.customerWithLink(customer)) {
+            const status = await InternalMethods.putData(customer.links[0].href, customer);
+            return status;
+        }
+        return false;
+    }
+
     static async getTrainings() {
         const responseJson = await InternalMethods.getData(databaseSettings.trainingsUrl);
         if (responseJson != null) {
@@ -75,6 +88,13 @@ export class DatabaseObjectMethods {
             return true;
         }
 
+        static customerWithLink(customer) {
+            if (customer.hasOwnProperty("links")) {
+                return this.customer(customer);
+            }
+            return false;
+        }
+
         static training(training) {
             const keys = ['date', 'duration', 'activity', 'customer'];
             for (let i = 0; i < keys.length; i++) {
@@ -90,6 +110,20 @@ export class DatabaseObjectMethods {
             }
             // all tests passed -> valid training object
             return true;
+        }
+    }
+
+    static Array = class {
+
+        static getSortOrder(property) {
+            return function (a, b) {
+                if (a[property] > b[property]) {
+                    return 1;
+                } else if (a[property] < b[property]) {
+                    return -1;
+                }
+                return 0;
+            }
         }
     }
 
@@ -123,7 +157,8 @@ class InternalMethods {
                 },
                 body: JSON.stringify(data),
             });
-            Log.writeLog("DatabaseAccessApi.postData(): " + response, 2);
+            Log.writeLog("DatabaseAccessApi.postData(): ", 2);
+            Log.writeLog(response, 2);
             return true;
         } catch (error) {
             Log.writeLog(this.className + ".postData(): " + error, 1);
@@ -140,7 +175,8 @@ class InternalMethods {
                 },
                 body: JSON.stringify(data),
             });
-            Log.writeLog(this.className + ".putData(): " + response, 2);
+            Log.writeLog(this.className + ".putData(): ", 2);
+            Log.writeLog(response, 2);
             return true;
         } catch (error) {
             Log.writeLog(this.className + ".putData(): " + error, 1);
@@ -156,7 +192,8 @@ class InternalMethods {
                     'Content-type': 'Application/json',
                 },
             });
-            Log.writeLog(this.className + ".deleteData(): " + response, 2);
+            Log.writeLog(this.className + ".deleteData(): ", 2);
+            Log.writeLog(response, 2);
             return true;
         } catch (error) {
             Log.writeLog(this.className + ".deleteData(): " + error, 1);

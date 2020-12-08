@@ -17,22 +17,28 @@ import Loading from "../components/Loading.js";
 
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
+import { GridApi } from "ag-grid-community";
 
 export default function CustomerList(props) {
 
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
 
+    // Used to choose what content is shown in the grid
     const [showAddress, setShowAddress] = useState(true);
     const [showContact, setShowContact] = useState(true);
 
+    // gridApi could be used for accessing grid data, we use it for CSV export
     const [gridApi, setGridApi] = useState(null);
     const gridRef = useRef();
 
     useEffect(() => {
+        // on load we fetch customers to populate the grid
         getCustomers();
     }, []);
 
+    // this function is used for toggling grid content. 
+    // (could be done prettier)
     const toggleGridVisibility = (event) => {
         if (event.target.name === "address") {
             setShowAddress(!showAddress);
@@ -57,6 +63,11 @@ export default function CustomerList(props) {
         setLoading(false);
     }
 
+    // We will use this function to update user to Rest API
+    const cellValueChanged = async (event) => {
+        await DatabaseAccessApi.updateCustomerByCustomer(event.data);
+    }
+
     const columns = [
         { headerName: "Firstname", field: "firstname" },
         { headerName: "Lastname", field: "lastname" },
@@ -77,13 +88,14 @@ export default function CustomerList(props) {
     return (
         <>
             <div className="ag-theme-material" style={{
-                textAlign: AgGridSettings.aboveDivAlign, 
+                textAlign: AgGridSettings.aboveDivAlign,
                 marginLeft: AgGridSettings.aboveDivMargin,
             }}>
                 <label>
                     <input type="checkbox" name="address" onChange={toggleGridVisibility} checked={showAddress} /> Address information
-            </label><br />
-                <label>
+            </label>
+            &nbsp;
+            <label>
                     <input type="checkbox" name="contact" onChange={toggleGridVisibility} checked={showContact} /> Contact information
             </label>
             </div>
@@ -91,10 +103,11 @@ export default function CustomerList(props) {
                 <AgGridReact
                     defaultColDef={{
                         flex: 2,
-                        minWidth: 200,
+                        minWidth: AgGridSettings.colMinWidth,
                         sortable: true,
                         filter: true,
                         floatingFilter: true,
+                        editable: true,
                     }}
                     animateRows='true'
                     ref={gridRef}
@@ -102,6 +115,9 @@ export default function CustomerList(props) {
                     onGridReady={onGridReady}
                     columnDefs={columns}
                     rowData={customers}
+                    pagination={AgGridSettings.pagination}
+                    paginationPageSize={AgGridSettings.paginationPageSize}
+                    onCellValueChanged={cellValueChanged}
                 >
                 </AgGridReact>
             </div>

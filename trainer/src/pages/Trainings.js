@@ -19,6 +19,7 @@ import moment from "moment";
 import Loading from "../components/Loading.js";
 
 // APP LOGIC
+import { AppSettings } from "../config/AppSettings.js";
 import { DatabaseAccessApi } from "../classes/DatabaseAccessApi.js";
 
 export default function TrainingList(props) {
@@ -65,7 +66,7 @@ export default function TrainingList(props) {
 
     const columns = [
         { headerName: "Activity", field: "activity" },
-        { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format('MMMM Do YYYY') } },
+        { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
         { headerName: "Duration", field: "duration" },
     ];
 
@@ -82,7 +83,7 @@ export default function TrainingList(props) {
                 <AgGridReact
                     defaultColDef={{
                         flex: 1,
-                        minWidth: 200,
+                        minWidth: AgGridSettings.colMinWidth,
                         sortable: true,
                         filter: true,
                         floatingFilter: true,
@@ -93,6 +94,8 @@ export default function TrainingList(props) {
                     onGridReady={onGridReady}
                     columnDefs={columns}
                     rowData={trainings}
+                    pagination={AgGridSettings.pagination}
+                    paginationPageSize={AgGridSettings.paginationPageSize}
                 >
                 </AgGridReact>
             </div>

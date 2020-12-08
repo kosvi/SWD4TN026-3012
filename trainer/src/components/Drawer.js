@@ -13,32 +13,35 @@ export function TitleBar(props) {
     return (
         <div style={{
             width: "100vw",
+            position: "fixed",
             height: drawerConfig.titleHeight,
             lineHeight: drawerConfig.titleHeight,
             backgroundColor: drawerConfig.backgroundColor,
             color: drawerConfig.color,
             alignItems: "center",
             boxShadow: "0 5px 5px #666",
-            top: "0",
-            left: "0",
+            borderBottom: "solid 2px " + drawerConfig.borderColor,
+            zIndex: "10",
         }}>
+            <DrawerButton text={props.menuText} toggleMethod={props.toggleMethod} open={props.menuOpen} />
             {props.title}
         </div>
     )
 }
 
-export function DrawerButton(props) {
+function DrawerButton(props) {
     return (
         <div style={{
             height: drawerConfig.titleHeight,
-            width: drawerConfig.drawerWidth,
             backgroundColor: drawerConfig.backgroundColor,
             display: "flex",
-            position: "fixed",
+            position: "absolute",
             top: "0",
             left: "0",
             alignItems: "center",
+            cursor: "pointer",
             color: drawerConfig.color,
+            borderBottom: "solid 2px " + drawerConfig.borderColor,
         }} onClick={props.toggleMethod} >
             {props.open ? <ChevronLeftIcon /> : <ChevronRightIcon /> } {props.text}
         </div >
@@ -51,17 +54,23 @@ export function Drawer(props) {
 
     return (
         <div style={{
-            minHeight: "100vh",
             width: drawerConfig.drawerWidth,
             backgroundColor: drawerConfig.backgroundColor,
             transition: "all 0.3s ease-in-out",
             transform: "translate(" + toggleWidth + ")",
             position: "fixed",
-            display: "flex",
-            flexDirection: "column",
+            height: "100vh",
+            marginTop: drawerConfig.titleHeight,
+            zIndex: "9",
         }}>
             {props.menu.map(link => (
-                <Link to={link.path} style={{color: drawerConfig.color, textDecoration: "none", fontSize: "1.2em"}} key={link.name}>{link.name}</Link>
+                <Link to={link.path} style={{
+                    color: drawerConfig.color, 
+                    marginTop: "0.2em", 
+                    textDecoration: "none", 
+                    fontSize: "1.2em", 
+                    display: "block"
+                }} key={link.name}>{link.name}</Link>
             ))}
         </div>
     )

@@ -42,7 +42,8 @@ function App() {
           <Switch>
             <Route exact path="/"><Home /></Route>
             <Route path="/customers"><CustomerList /></Route>
-            <Route path="/trainings"><TrainingList customerTrainingUrl="https://customerrest.herokuapp.com/api/customers/1/trainings" /></Route>
+            <Route path="/trainings/:id"><TrainingList /></Route>
+            <Route path="/trainings"><TrainingList /></Route>
             <Route path="/about"><About /></Route>
             <Route><Error404 /></Route>
           </Switch>

@@ -5,17 +5,31 @@ export class DatabaseAccessApi {
 
     static async getCustomers() {
         const responseJson = await InternalMethods.getData(databaseSettings.customersUrl);
-        return responseJson.content;
+        if (responseJson != null) {
+            return responseJson.content;
+        }
+        return null;
+    }
+
+    static async getCustomer(id) {
+        const responseJson = await InternalMethods.getData(databaseSettings.customerUrl.replace("{id}", id));
+        return responseJson;
     }
 
     static async getTrainings() {
         const responseJson = await InternalMethods.getData(databaseSettings.trainingsUrl);
-        return responseJson.content;
+        if (responseJson != null) {
+            return responseJson.content;
+        }
+        return null;
     }
 
-    static async getCustomerTrainings(url) {
-        const responseJson = await InternalMethods.getData(url);
-        return responseJson.content;
+    static async getCustomerTrainings(id) {
+        const responseJson = await InternalMethods.getData(databaseSettings.customerTrainingsUrl.replace("{id}", id));
+        if (responseJson != null) {
+            return responseJson.content;
+        }
+        return null;
     }
 
     // Used to reset the database if needed
@@ -33,7 +47,7 @@ export class DatabaseObjectMethods {
     // This is a nested class to hold all methods to extract data from database objects
     static Extract = class {
 
-        static customerIdFromJson(customer) {
+        static customerIdFromCustomer(customer) {
             try {
                 const parts = customer.links[0].href.split("/customers/");
                 return parts[1];

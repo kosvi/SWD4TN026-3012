@@ -1,19 +1,22 @@
 // REACT
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 // AG-GRID
 import { AgGridReact } from "ag-grid-react";
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import { AgGridSettings } from "../config/AgGridSettings.js";
 
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
+import SearchIcon from '@material-ui/icons/Search';
 
 // CUSTOM COMPONENTS
 import Loading from "../components/Loading.js";
 
 // APP LOGIC
-import { DatabaseAccessApi } from "../classes/DatabaseAccessApi.js";
+import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
 
 export default function CustomerList(props) {
 
@@ -62,6 +65,7 @@ export default function CustomerList(props) {
         { headerName: "Postcode", field: "postcode", flex: 1, hide: !showAddress },
         { headerName: "Email", field: "email", hide: !showContact },
         { headerName: "Phone", field: "phone", flex: 1, hide: !showContact },
+        { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <CustomerButton id={DatabaseObjectMethods.Extract.customerIdFromCustomer(params.data)} /> },
     ];
 
     if (loading) {
@@ -72,7 +76,10 @@ export default function CustomerList(props) {
 
     return (
         <>
-            <div className="ag-theme-material" style={{ textAlign: "left", marginLeft: "5vw" }}>
+            <div className="ag-theme-material" style={{
+                textAlign: AgGridSettings.aboveDivAlign, 
+                marginLeft: AgGridSettings.aboveDivMargin,
+            }}>
                 <label>
                     <input type="checkbox" name="address" onChange={toggleGridVisibility} checked={showAddress} /> Address information
             </label><br />
@@ -80,7 +87,7 @@ export default function CustomerList(props) {
                     <input type="checkbox" name="contact" onChange={toggleGridVisibility} checked={showContact} /> Contact information
             </label>
             </div>
-            <div className="ag-theme-material" style={{ height: "90vh", width: "100vw", margin: "auto" }}>
+            <div className="ag-theme-material" style={{ height: AgGridSettings.height, width: AgGridSettings.width, margin: "auto" }}>
                 <AgGridReact
                     defaultColDef={{
                         flex: 2,
@@ -91,7 +98,7 @@ export default function CustomerList(props) {
                     }}
                     animateRows='true'
                     ref={gridRef}
-                    rowSelection="multiple"
+                    rowSelection={AgGridSettings.rowSelection}
                     onGridReady={onGridReady}
                     columnDefs={columns}
                     rowData={customers}
@@ -99,5 +106,22 @@ export default function CustomerList(props) {
                 </AgGridReact>
             </div>
         </>
+    )
+}
+
+function CustomerButton(props) {
+
+    const [linkPath, setLinkPath] = useState('');
+
+    useEffect(() => {
+        setLinkPath("/trainings/" + props.id);
+    }, []);
+
+    return (
+        <div>
+            <Link to={linkPath} style={{ color: "black" }}>
+                <SearchIcon />
+            </Link>
+        </div>
     )
 }

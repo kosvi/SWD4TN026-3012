@@ -22,7 +22,7 @@ export default function Home() {
     const createTrainingBoxes = (index) => {
         if (trainings.length > index) {
             return (
-                <TrainingBox activity={trainings[index].activity} date={trainings[index].date} customer={trainings[index].links[2].href} />
+                <TrainingBox activity={trainings[index].activity} date={trainings[index].date} customer={trainings[index].customer} />
             )
         }
         else {
@@ -54,18 +54,6 @@ export default function Home() {
 // This here function is used to create those nice boxes for latest trainings!
 function TrainingBox(props) {
 
-    const [customer, setCustomer] = useState({ firstname: 'unknown', lastname: 'unknown' });
-
-    useEffect(() => {
-        const getCustomer = async () => {
-            const responseJson = await DatabaseAccessApi.getCustomerByUrl(props.customer);
-            if (responseJson !== null) {
-                setCustomer(responseJson);
-            }
-        };
-        getCustomer();
-    }, [props.customer]);
-
     return (
         <div style={{
             display: "flex",
@@ -75,7 +63,7 @@ function TrainingBox(props) {
             marginTop: "1.4em",
         }}>
             <h3>{moment(props.date).format(AppSettings.dateFormat)}</h3>
-            Customer: {customer.firstname} {customer.lastname}
+            Customer: {props.customer.firstname} {props.customer.lastname}
             <br />
             Activity: {props.activity}
         </div>

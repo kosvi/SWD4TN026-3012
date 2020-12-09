@@ -30,11 +30,8 @@ export class DatabaseAccessApi {
     }
 
     static async getTrainings() {
-        const responseJson = await InternalMethods.getData(databaseSettings.trainingsUrl);
-        if (responseJson != null) {
-            return responseJson.content;
-        }
-        return null;
+        const responseJson = await InternalMethods.getData(databaseSettings.fullTrainingsUrl);
+        return responseJson;
     }
 
     static async getCustomerTrainings(id) {
@@ -43,6 +40,14 @@ export class DatabaseAccessApi {
             return responseJson.content;
         }
         return null;
+    }
+
+    static async addCustomerTraining(training) {
+        if (DatabaseObjectMethods.Validate.trainingWithLink(training)) {
+            const status = await InternalMethods.postData(databaseSettings.trainingsUrl, training);
+            return status;
+        }
+        return false;
     }
 
     // Used to reset the database if needed
@@ -103,13 +108,17 @@ export class DatabaseObjectMethods {
                     return false;
                 }
             }
+            // all tests passed -> valid training object
+            return true;
+        }
+
+        static trainingWithLink(training) {
             // check that customer-link is in valid form
             if (!(/https:\/\/customerrest.herokuapp.com\/api\/customers\/[0-9]+/.text(training.customer))) {
                 Log.writeLog(this.className + ".Validate.training(), incorrect customer URL: " + training.customer, 1);
                 return false;
             }
-            // all tests passed -> valid training object
-            return true;
+            return this.training(training);
         }
     }
 

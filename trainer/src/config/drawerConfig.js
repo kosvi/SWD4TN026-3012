@@ -4,4 +4,9 @@ export const drawerConfig = {
     backgroundColor: "blueviolet",
     borderColor: "yellow",
     color: "white",
+
+    helpHeight: "200px",
+    helpBackgroundColor: "white",
+    helpBorderColor: "black",
+    
 }

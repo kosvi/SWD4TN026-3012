@@ -11,13 +11,17 @@ import { AgGridSettings } from "../config/AgGridSettings.js";
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
 import SearchIcon from '@material-ui/icons/Search';
+import Snackbar from "@material-ui/core/Snackbar";
 
 // CUSTOM COMPONENTS
+import { helpContents } from "../config/helpContent.js";
+import { HelpButton } from "../components/Drawer.js";
 import Loading from "../components/Loading.js";
 
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
 import { GridApi } from "ag-grid-community";
+import { AppSettings } from "../config/AppSettings.js";
 
 export default function CustomerList(props) {
 
@@ -27,6 +31,10 @@ export default function CustomerList(props) {
     // Used to choose what content is shown in the grid
     const [showAddress, setShowAddress] = useState(true);
     const [showContact, setShowContact] = useState(true);
+
+    // Snackbar messages
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [snackMessage, setSnackMessage] = useState("");
 
     // gridApi could be used for accessing grid data, we use it for CSV export
     const [gridApi, setGridApi] = useState(null);
@@ -65,7 +73,21 @@ export default function CustomerList(props) {
 
     // We will use this function to update user to Rest API
     const cellValueChanged = async (event) => {
-        await DatabaseAccessApi.updateCustomerByCustomer(event.data);
+        const status = await DatabaseAccessApi.updateCustomerByCustomer(event.data);
+        if (status !== false) {
+            handleSnackOpen("Save successfull");
+        }
+    }
+
+    // for the snackbar
+    const handleClose = () => {
+        setSnackOpen(false);
+        setSnackMessage("");
+    }
+
+    const handleSnackOpen = (message) => {
+        setSnackMessage(message);
+        setSnackOpen(true);
     }
 
     const columns = [
@@ -87,6 +109,7 @@ export default function CustomerList(props) {
 
     return (
         <>
+            <HelpButton content={helpContents.customers} />
             <div className="ag-theme-material" style={{
                 textAlign: AgGridSettings.aboveDivAlign,
                 marginLeft: AgGridSettings.aboveDivMargin,
@@ -121,6 +144,15 @@ export default function CustomerList(props) {
                 >
                 </AgGridReact>
             </div>
+            <Snackbar open={snackOpen} autoHideDuration={AppSettings.snackAutohideDuration} onClose={handleClose}>
+                <div style={{
+                    background: AppSettings.snackBackground,
+                    border: AppSettings.snackBorder,
+                    color: AppSettings.snackColor,
+                    padding: AppSettings.snackPadding,
+                    borderRadius: AppSettings.snackBorderRadius,
+                }}>{snackMessage}</div>
+            </Snackbar>
         </>
     )
 }

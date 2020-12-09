@@ -27,6 +27,7 @@ export default function TrainingList(props) {
     const [loading, setLoading] = useState(true);
     const [trainings, setTrainings] = useState([]);
     const [customer, setCustomer] = useState([]);
+    const [columns, setColumns] = useState([]);
 
     const [gridApi, setGridApi] = useState(null);
     const gridRef = useRef();
@@ -46,8 +47,10 @@ export default function TrainingList(props) {
         var allTrainings;
         if (typeof id === 'undefined') {
             allTrainings = await DatabaseAccessApi.getTrainings();
+            setColumns(columnsWithNames);
         } else {
             allTrainings = await DatabaseAccessApi.getCustomerTrainings(id);
+            setColumns(columnsWithoutNames);
             const currentCustomer = await DatabaseAccessApi.getCustomer(id);
             if (currentCustomer != null) {
                 setCustomer(currentCustomer);
@@ -64,11 +67,21 @@ export default function TrainingList(props) {
         setLoading(false);
     }
 
-    const columns = [
+    const columnsWithNames = [
+        { headerName: "Firstname", field: "customer.firstname" },
+        { headerName: "Lastname", field: "customer.lastname" },
+        // { headerName: "Firstname", cellRenderer: function (params) { return params.data.customer.firstname }, sortable: false },
+        // { headerName: "Lastname", cellRenderer: function (params) { return params.data.customer.lastname }, sortable: false },
         { headerName: "Activity", field: "activity" },
         { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
         { headerName: "Duration", field: "duration" },
     ];
+    const columnsWithoutNames = [
+        { headerName: "Activity", field: "activity" },
+        { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
+        { headerName: "Duration", field: "duration" },
+    ];
+
 
     if (loading) {
         return (

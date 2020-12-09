@@ -10,7 +10,7 @@ import { drawerConfig } from "./config/drawerConfig.js";
 
 // Here we import all pages
 import Home from "./pages/Home.js";
-import CustomerList from "./pages/Customers.js";
+import CustomerList from "./pages/CustomerList.js";
 import TrainingList from "./pages/Trainings.js";
 import About from "./pages/About.js";
 import { Error404 } from "./pages/Errors.js";

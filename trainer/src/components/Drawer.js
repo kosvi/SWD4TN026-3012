@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { drawerConfig } from "../config/drawerConfig.js";
 
 /*
@@ -43,7 +45,7 @@ function DrawerButton(props) {
             color: drawerConfig.color,
             borderBottom: "solid 2px " + drawerConfig.borderColor,
         }} onClick={props.toggleMethod} >
-            {props.open ? <ChevronLeftIcon /> : <ChevronRightIcon /> } {props.text}
+            {props.open ? <ChevronLeftIcon /> : <ChevronRightIcon />} {props.text}
         </div >
     )
 }
@@ -66,13 +68,66 @@ export function Drawer(props) {
         }}>
             {props.menu.map(link => (
                 <Link to={link.path} style={{
-                    color: drawerConfig.color, 
-                    marginTop: "0.2em", 
-                    textDecoration: "none", 
-                    fontSize: "1.2em", 
+                    color: drawerConfig.color,
+                    marginTop: "0.2em",
+                    textDecoration: "none",
+                    fontSize: "1.2em",
                     display: "block"
                 }} key={link.name}>{link.name}</Link>
             ))}
         </div>
+    )
+}
+
+export function HelpButton(props) {
+
+    const [open, setOpen] = useState(false);
+    const [translateValue, setTranslateValue] = useState('-' + drawerConfig.helpHeight);
+
+    const toggleOpen = () => {
+        if (open) {
+            setTranslateValue("-" + drawerConfig.helpHeight);
+        } else {
+            setTranslateValue("0");
+        }
+        setOpen(!open);
+    }
+
+    return (
+        <>
+            <div style={{
+                position: "fixed",
+                display: "flex",
+                alignItems: "center",
+                top: "0",
+                right: "0",
+                height: drawerConfig.titleHeight,
+                lineHeight: drawerConfig.titleHeight,
+                color: drawerConfig.color,
+                zIndex: "11",
+                cursor: "pointer",
+            }} onClick={toggleOpen}>
+                Help {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </div>
+            <div style={{
+                position: "fixed",
+                top: "0",
+                right: "0",
+                zIndex: "5",
+                marginTop: drawerConfig.titleHeight,
+                padding: "1.5em",
+                border: "solid 2px " + drawerConfig.helpBorderColor,
+                borderRadius: "0 0 0.5em 0.5em",
+                backgroundColor: drawerConfig.helpBackgroundColor,
+                width: drawerConfig.drawerWidth,
+                height: drawerConfig.helpHeight,
+                overflowY: "auto",
+                transition: "all 0.3s ease-in-out",
+                transform: "translateY(" + translateValue + ")",
+                textAlign: "left",
+            }}>
+                {props.content.split('\n').map((line, index) => <p key={index} style={{marginTop: "10px"}}>{line}</p>)}
+            </div>
+        </>
     )
 }

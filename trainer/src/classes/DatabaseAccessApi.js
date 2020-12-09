@@ -43,7 +43,7 @@ export class DatabaseAccessApi {
     }
 
     static async addCustomerTraining(training) {
-        if (DatabaseObjectMethods.Validate.trainingWithLink(training)) {
+        if (DatabaseObjectMethods.Validate.training(training)) {
             const status = await InternalMethods.postData(databaseSettings.trainingsUrl, training);
             return status;
         }
@@ -127,9 +127,9 @@ export class DatabaseObjectMethods {
         static getSortOrder(property) {
             return function (a, b) {
                 if (a[property] > b[property]) {
-                    return 1;
-                } else if (a[property] < b[property]) {
                     return -1;
+                } else if (a[property] < b[property]) {
+                    return 1;
                 }
                 return 0;
             }

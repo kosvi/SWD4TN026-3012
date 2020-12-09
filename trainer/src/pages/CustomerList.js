@@ -21,7 +21,7 @@ import Loading from "../components/Loading.js";
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
 import { GridApi } from "ag-grid-community";
-import { AppSettings } from "../config/AppSettings.js";
+import { snackBarSettings, snackBarStyle } from "../config/snackBarConfig.js";
 
 export default function CustomerList(props) {
 
@@ -144,14 +144,8 @@ export default function CustomerList(props) {
                 >
                 </AgGridReact>
             </div>
-            <Snackbar open={snackOpen} autoHideDuration={AppSettings.snackAutohideDuration} onClose={handleClose}>
-                <div style={{
-                    background: AppSettings.snackBackground,
-                    border: AppSettings.snackBorder,
-                    color: AppSettings.snackColor,
-                    padding: AppSettings.snackPadding,
-                    borderRadius: AppSettings.snackBorderRadius,
-                }}>{snackMessage}</div>
+            <Snackbar open={snackOpen} autoHideDuration={snackBarSettings.autoHideDuration} onClose={handleClose}>
+                <div style={snackBarStyle}>{snackMessage}</div>
             </Snackbar>
         </>
     )

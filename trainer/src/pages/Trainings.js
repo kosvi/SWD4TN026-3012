@@ -11,12 +11,15 @@ import { AgGridSettings } from "../config/AgGridSettings.js";
 
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import { snackBarSettings, snackBarStyle } from "../config/snackBarConfig.js";
 
 // MOMENT
 import moment from "moment";
 
 // CUSTOM COMPONENTS
 import Loading from "../components/Loading.js";
+import AddTraining from "../components/AddTraining.js";
 
 // APP LOGIC
 import { AppSettings } from "../config/AppSettings.js";
@@ -26,8 +29,13 @@ export default function TrainingList(props) {
 
     const [loading, setLoading] = useState(true);
     const [trainings, setTrainings] = useState([]);
-    const [customer, setCustomer] = useState([]);
+    const [customer, setCustomer] = useState(null);
     const [columns, setColumns] = useState([]);
+    const [formOpen, setFormOpen] = useState(false);
+
+    // Snackbar messages
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [snackMessage, setSnackMessage] = useState("");
 
     const [gridApi, setGridApi] = useState(null);
     const gridRef = useRef();
@@ -67,6 +75,29 @@ export default function TrainingList(props) {
         setLoading(false);
     }
 
+    const toggleFormOpen = () => {
+        if (customer !== null) {
+            setFormOpen(!formOpen);
+        }
+    }
+
+    const saveSuccess = () => {
+        setFormOpen(false);
+        handleSnackOpen("Training saved!");
+        getTrainings();
+    }
+
+    // for the snackbar
+    const handleClose = () => {
+        setSnackOpen(false);
+        setSnackMessage("");
+    }
+
+    const handleSnackOpen = (message) => {
+        setSnackMessage(message);
+        setSnackOpen(true);
+    }
+
     const columnsWithNames = [
         { headerName: "Firstname", field: "customer.firstname" },
         { headerName: "Lastname", field: "customer.lastname" },
@@ -91,7 +122,8 @@ export default function TrainingList(props) {
 
     return (
         <>
-            {typeof id !== 'undefined' && <CustomerInfo firstname={customer.firstname} lastname={customer.lastname} />}
+            {typeof id !== 'undefined' && <CustomerInfo customer={customer} />}
+            {typeof id !== 'undefined' && <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add training</Button>}
             <div className="ag-theme-material" style={{ height: AgGridSettings.height, width: AgGridSettings.width, margin: "auto" }}>
                 <AgGridReact
                     defaultColDef={{
@@ -111,19 +143,24 @@ export default function TrainingList(props) {
                     paginationPageSize={AgGridSettings.paginationPageSize}
                 >
                 </AgGridReact>
+                {formOpen && <AddTraining customer={customer} closeMethod={toggleFormOpen} saveMethod={saveSuccess} />}
             </div>
+            <Snackbar open={snackOpen} autoHideDuration={snackBarSettings.autoHideDuration} onClose={handleClose}>
+                <div style={snackBarStyle}>{snackMessage}</div>
+            </Snackbar>
         </>
     )
 }
 
 function CustomerInfo(props) {
+
     return (
         <div className="ag-theme-material" style={{
             textAlign: AgGridSettings.aboveDivAlign,
             marginLeft: AgGridSettings.aboveDivMargin,
         }}>
             <Link to="/customers" style={{ color: "blue" }}>back to customerlist</Link><br /><br />
-            <b>Customer:</b> {props.firstname} {props.lastname}
+            <b>Customer:</b> {props.customer.firstname} {props.customer.lastname}
         </div>
     )
 }

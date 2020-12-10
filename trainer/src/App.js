@@ -33,6 +33,10 @@ function App() {
     setDrawerOpen(!drawerOpen);
   }
 
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  }
+
   // Here we can define the list of links in the menu
   const menuContent = [
     { path: "/", name: "Home" },
@@ -43,7 +47,7 @@ function App() {
 
   return (
     <div className="App">
-      <TitleBar title="Personal trainer" toggleMethod={toggleDrawer} menuText="Menu" menuOpen={drawerOpen} />
+      <TitleBar title="Personal trainer" toggleMethod={toggleDrawer} closeMethod={closeDrawer} menuText="Menu" menuOpen={drawerOpen} />
       {/*<DrawerButton toggleMethod={toggleDrawer} open={drawerOpen} text="Menu" />*/}
       <Router>
         <Drawer open={drawerOpen} menu={menuContent} />
@@ -52,7 +56,7 @@ function App() {
             <Route exact path="/"><Home /></Route>
             <Route path="/customers"><CustomerList /></Route>
             <Route path="/customer/:id"><Customer /></Route >
-            <Route path="/trainings"><TrainingList /></Route>
+            <Route path="/trainings"><TrainingList customer="-1" /></Route>
             <Route path="/about"><About /></Route>
             <Route><Error404 /></Route>
           </Switch>

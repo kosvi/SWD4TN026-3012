@@ -33,6 +33,7 @@ export default function TrainingList(props) {
 
     const [loading, setLoading] = useState(true);
     const [trainings, setTrainings] = useState([]);
+    const [customerId, setCustomerId] = useState(props.customer);
     const [customer, setCustomer] = useState(null);
     const [columns, setColumns] = useState([]);
     const [formOpen, setFormOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function TrainingList(props) {
 
     const [gridApi, setGridApi] = useState(null);
     const gridRef = useRef();
-    const { id } = useParams();
+    //    const { id } = useParams();
 
     useEffect(() => {
         getTrainings();
@@ -57,13 +58,14 @@ export default function TrainingList(props) {
     const getTrainings = async () => {
         setLoading(true);
         var allTrainings;
-        if (typeof id === 'undefined') {
+        //        if (typeof id === 'undefined') {
+        if (customerId < 0) {
             allTrainings = await DatabaseAccessApi.getTrainings();
             setColumns(columnsWithNames);
         } else {
-            allTrainings = await DatabaseAccessApi.getCustomerTrainings(id);
+            allTrainings = await DatabaseAccessApi.getCustomerTrainings(customerId);
             setColumns(columnsWithoutNames);
-            const currentCustomer = await DatabaseAccessApi.getCustomer(id);
+            const currentCustomer = await DatabaseAccessApi.getCustomer(customerId);
             if (currentCustomer != null) {
                 setCustomer(currentCustomer);
             }
@@ -143,9 +145,9 @@ export default function TrainingList(props) {
 
     return (
         <>
-            {typeof id !== 'undefined' && <CustomerInfo customer={customer} />}
-            {typeof id !== 'undefined' && <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add training</Button>}
-            {typeof id === 'undefined' && <HelpButton content={helpContents.trainings} />}
+            {customerId >= 0 && <CustomerInfo customer={customer} />}
+            {customerId >= 0 && <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add training</Button>}
+            {customerId < 0 && <HelpButton content={helpContents.trainings} />}
             <div className="ag-theme-material" style={{ height: AgGridSettings.height, width: AgGridSettings.width, margin: "auto" }}>
                 <AgGridReact
                     defaultColDef={{

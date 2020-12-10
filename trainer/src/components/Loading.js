@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Refresh from "@material-ui/icons/Refresh";
+// https://www.npmjs.com/package/react-loader-spinner
+import Loader from "react-loader-spinner";
 
 export default function Loading(props) {
 
@@ -35,7 +36,7 @@ export default function Loading(props) {
                 alignItems: "center",
             }}>
                 <p>{msg}</p>
-                <Refresh />
+		<Loader type="TailSpin" color="#000000" height={80} width={80} />
             </div>
         </div>
     )

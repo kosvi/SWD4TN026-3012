@@ -21,6 +21,11 @@ export class DatabaseAccessApi {
         return responseJson;
     }
 
+    static async addCustomer(customer) {
+        const status = await InternalMethods.postData(databaseSettings.customersUrl, customer);
+        return status;
+    }
+
     static async updateCustomerByCustomer(customer) {
         if (DatabaseObjectMethods.Validate.customerWithLink(customer)) {
             const status = await InternalMethods.putData(customer.links[0].href, customer);

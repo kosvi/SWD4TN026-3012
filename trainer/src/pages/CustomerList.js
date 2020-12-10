@@ -19,6 +19,8 @@ import { helpContents } from "../config/helpContent.js";
 import { HelpButton } from "../components/Drawer.js";
 import Loading from "../components/Loading.js";
 import CustomerButton from "../components/CustomerButton.js";
+import { AppSettings } from "../config/AppSettings.js";
+import AddCustomer from "../components/AddCustomer.js";
 
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
@@ -29,6 +31,7 @@ export default function CustomerList(props) {
 
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
+    const [formOpen, setFormOpen] = useState(false);
 
     // Used to choose what content is shown in the grid
     const [showAddress, setShowAddress] = useState(true);
@@ -95,6 +98,16 @@ export default function CustomerList(props) {
         }
     }
 
+    const toggleFormOpen = () => {
+        setFormOpen(!formOpen);
+    }
+
+    const saveSuccess = async () => {
+        await getCustomers();
+        setFormOpen(false);
+        handleSnackOpen("Customer saved!");
+    }
+
     // for the snackbar
     const handleClose = () => {
         setSnackOpen(false);
@@ -126,6 +139,7 @@ export default function CustomerList(props) {
 
     return (
         <>
+            <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add customer</Button>
             <HelpButton content={helpContents.customers} />
             <div className="ag-theme-material" style={{
                 textAlign: AgGridSettings.aboveDivAlign,
@@ -161,6 +175,7 @@ export default function CustomerList(props) {
                     onCellValueChanged={cellValueChanged}
                 >
                 </AgGridReact>
+                {formOpen && <AddCustomer closeMethod={toggleFormOpen} saveMethod={saveSuccess} />}
             </div>
             <Snackbar open={snackOpen} autoHideDuration={snackBarSettings.autoHideDuration} onClose={handleClose}>
                 <div style={snackBarStyle}>{snackMessage}</div>

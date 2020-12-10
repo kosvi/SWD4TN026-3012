@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
@@ -25,7 +26,7 @@ export function TitleBar(props) {
             borderBottom: "solid 2px " + drawerConfig.borderColor,
             zIndex: "10",
         }}>
-            <DrawerButton text={props.menuText} toggleMethod={props.toggleMethod} open={props.menuOpen} />
+            <DrawerButton text={props.menuText} toggleMethod={props.toggleMethod} closeMethod={props.closeMethod} open={props.menuOpen} />
             {props.title}
         </div>
     )
@@ -33,20 +34,22 @@ export function TitleBar(props) {
 
 function DrawerButton(props) {
     return (
-        <div style={{
-            height: drawerConfig.titleHeight,
-            backgroundColor: drawerConfig.backgroundColor,
-            display: "flex",
-            position: "absolute",
-            top: "0",
-            left: "0",
-            alignItems: "center",
-            cursor: "pointer",
-            color: drawerConfig.color,
-            borderBottom: "solid 2px " + drawerConfig.borderColor,
-        }} onClick={props.toggleMethod} >
-            {props.open ? <ChevronLeftIcon /> : <ChevronRightIcon />} {props.text}
-        </div >
+        <ClickAwayListener onClickAway={props.closeMethod}>
+            <div style={{
+                height: drawerConfig.titleHeight,
+                backgroundColor: drawerConfig.backgroundColor,
+                display: "flex",
+                position: "absolute",
+                top: "0",
+                left: "0",
+                alignItems: "center",
+                cursor: "pointer",
+                color: drawerConfig.color,
+                borderBottom: "solid 2px " + drawerConfig.borderColor,
+            }} onClick={props.toggleMethod} >
+                {props.open ? <ChevronLeftIcon /> : <ChevronRightIcon />} {props.text}
+            </div >
+        </ClickAwayListener>
     )
 }
 
@@ -84,6 +87,11 @@ export function HelpButton(props) {
     const [open, setOpen] = useState(false);
     const [translateValue, setTranslateValue] = useState('-' + drawerConfig.helpHeight);
 
+    const handleClickAway = () => {
+        setOpen(false);
+        setTranslateValue("-" + drawerConfig.helpHeight);
+    }
+
     const toggleOpen = () => {
         if (open) {
             setTranslateValue("-" + drawerConfig.helpHeight);
@@ -95,20 +103,22 @@ export function HelpButton(props) {
 
     return (
         <>
-            <div style={{
-                position: "fixed",
-                display: "flex",
-                alignItems: "center",
-                top: "0",
-                right: "0",
-                height: drawerConfig.titleHeight,
-                lineHeight: drawerConfig.titleHeight,
-                color: drawerConfig.color,
-                zIndex: "11",
-                cursor: "pointer",
-            }} onClick={toggleOpen}>
-                Help {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </div>
+            <ClickAwayListener onClickAway={handleClickAway}>
+                <div style={{
+                    position: "fixed",
+                    display: "flex",
+                    alignItems: "center",
+                    top: "0",
+                    right: "0",
+                    height: drawerConfig.titleHeight,
+                    lineHeight: drawerConfig.titleHeight,
+                    color: drawerConfig.color,
+                    zIndex: "11",
+                    cursor: "pointer",
+                }} onClick={toggleOpen}>
+                    Help {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </div>
+            </ClickAwayListener>
             <div style={{
                 position: "fixed",
                 top: "0",
@@ -126,7 +136,7 @@ export function HelpButton(props) {
                 transform: "translateY(" + translateValue + ")",
                 textAlign: "left",
             }}>
-                {props.content.split('\n').map((line, index) => <p key={index} style={{marginTop: "10px"}}>{line}</p>)}
+                {props.content.split('\n').map((line, index) => <p key={index} style={{ marginTop: "10px" }}>{line}</p>)}
             </div>
         </>
     )

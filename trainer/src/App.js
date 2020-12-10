@@ -2,7 +2,8 @@ import './App.css';
 
 // 3rd party components
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useParams } from "react-router";
+import { BrowserRouter as Router, Switch, Route, useLocation } from "react-router-dom";
 
 // These imports are for menu 
 import { TitleBar, Drawer } from "./components/Drawer.js";
@@ -12,8 +13,16 @@ import { drawerConfig } from "./config/drawerConfig.js";
 import Home from "./pages/Home.js";
 import CustomerList from "./pages/CustomerList.js";
 import TrainingList from "./pages/Trainings.js";
+import Customer from "./pages/Customer.js";
 import About from "./pages/About.js";
 import { Error404 } from "./pages/Errors.js";
+
+/*
+// https://medium.com/better-programming/using-url-parameters-and-query-strings-with-react-router-fffdcea7a8e9
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+*/
 
 function App() {
 
@@ -42,7 +51,7 @@ function App() {
           <Switch>
             <Route exact path="/"><Home /></Route>
             <Route path="/customers"><CustomerList /></Route>
-            <Route path="/trainings/:id"><TrainingList /></Route>
+            <Route path="/customer/:id"><Customer /></Route >
             <Route path="/trainings"><TrainingList /></Route>
             <Route path="/about"><About /></Route>
             <Route><Error404 /></Route>

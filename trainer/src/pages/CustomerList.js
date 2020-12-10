@@ -11,12 +11,14 @@ import { AgGridSettings } from "../config/AgGridSettings.js";
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
 import SearchIcon from '@material-ui/icons/Search';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Snackbar from "@material-ui/core/Snackbar";
 
 // CUSTOM COMPONENTS
 import { helpContents } from "../config/helpContent.js";
 import { HelpButton } from "../components/Drawer.js";
 import Loading from "../components/Loading.js";
+import CustomerButton from "../components/CustomerButton.js";
 
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
@@ -71,6 +73,20 @@ export default function CustomerList(props) {
         setLoading(false);
     }
 
+    const deleteCustomer = async (customer) => {
+        const customerUrl = customer.links[0].href;
+        if (window.confirm("Are you sure you want to delete " + customer.firstname + " " + customer.lastname + "?")) {
+            const status = await DatabaseAccessApi.deleteCustomerWithUrl(customerUrl);
+            if (status !== false) {
+                // halpaa ja likasta kuin dissais puhevikasta...
+                await getCustomers();
+                handleSnackOpen("Deleted");
+            } else {
+                handleSnackOpen("Failed");
+            }
+        }
+    }
+
     // We will use this function to update user to Rest API
     const cellValueChanged = async (event) => {
         const status = await DatabaseAccessApi.updateCustomerByCustomer(event.data);
@@ -99,6 +115,7 @@ export default function CustomerList(props) {
         { headerName: "Email", field: "email", hide: !showContact },
         { headerName: "Phone", field: "phone", flex: 1, hide: !showContact },
         { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <CustomerButton id={DatabaseObjectMethods.Extract.customerIdFromCustomer(params.data)} /> },
+        { headerName: "", field: "", flex: 1, sotrable: false, filter: false, cellRendererFramework: params => <DeleteForeverIcon style={{ color: "red", cursor: "pointer" }} onClick={() => deleteCustomer(params.data)} /> },
     ];
 
     if (loading) {
@@ -140,6 +157,7 @@ export default function CustomerList(props) {
                     rowData={customers}
                     pagination={AgGridSettings.pagination}
                     paginationPageSize={AgGridSettings.paginationPageSize}
+                    paginationAutoPageSize={AgGridSettings.paginationAutoPageSize}
                     onCellValueChanged={cellValueChanged}
                 >
                 </AgGridReact>
@@ -151,12 +169,13 @@ export default function CustomerList(props) {
     )
 }
 
+/*
 function CustomerButton(props) {
 
     const [linkPath, setLinkPath] = useState('');
 
     useEffect(() => {
-        setLinkPath("/trainings/" + props.id);
+        setLinkPath("/customer/" + props.id);
     }, []);
 
     return (
@@ -167,3 +186,4 @@ function CustomerButton(props) {
         </div>
     )
 }
+*/

@@ -18,14 +18,18 @@ import { formStyles, formDiv, formTextField, formButtonDiv } from "../config/for
 export default function AddTraining(props) {
 
     const [training, setTraining] = useState({ date: '', activity: '', duration: '', customer: props.customer.links[1].href });
+    const [trainingTime, setTrainingTime] = useState('');
 
     const valueChanged = (event) => {
         setTraining({ ...training, [event.target.name]: event.target.value })
     }
 
+    const timeChanged = (event) => {
+        setTrainingTime(event.target.value);
+    }
+
     const submit = async () => {
-        const newTraining = { ...training, date: moment(training.date).toISOString(true) };
-        console.log(newTraining);
+        const newTraining = { ...training, date: moment(training.date + " " + trainingTime).toISOString(true) };
         const status = await DatabaseAccessApi.addCustomerTraining(newTraining);
         if (status === false) {
             return;
@@ -50,6 +54,7 @@ export default function AddTraining(props) {
                 <h3 style={{ marginBottom: "1em" }}>Add training</h3>
                 {props.customer.firstname} {props.customer.lastname}
                 <TextField style={formTextField} type="date" InputLabelProps={{ shrink: true }} onChange={valueChanged} name="date" label="Date" value={training.date} variant={AppSettings.materialVariant} />
+                <TextField style={formTextField} type="time" InputLabelProps={{ shrink: true }} onChange={timeChanged} name="time" label="Time" variant={AppSettings.materialVariant} />
                 <TextField style={formTextField} onChange={valueChanged} name="activity" label="Activity" value={training.activity} variant={AppSettings.materialVariant} />
                 <TextField style={formTextField} type="number" onChange={valueChanged} name="duration" label="Duration" value={training.duration} variant={AppSettings.materialVariant} />
                 <div style={formButtonDiv}>

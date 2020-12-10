@@ -11,6 +11,7 @@ import { AgGridSettings } from "../config/AgGridSettings.js";
 
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Snackbar from "@material-ui/core/Snackbar";
 import { snackBarSettings, snackBarStyle } from "../config/snackBarConfig.js";
 
@@ -20,6 +21,9 @@ import moment from "moment";
 // CUSTOM COMPONENTS
 import Loading from "../components/Loading.js";
 import AddTraining from "../components/AddTraining.js";
+import CustomerButton from "../components/CustomerButton.js";
+import { HelpButton } from "../components/Drawer.js";
+import { helpContents } from "../config/helpContent.js";
 
 // APP LOGIC
 import { AppSettings } from "../config/AppSettings.js";
@@ -75,16 +79,31 @@ export default function TrainingList(props) {
         setLoading(false);
     }
 
+    const deleteTraining = async (training) => {
+        const trainingUrl = training.links[0].href;
+        if (window.confirm("Are you sure you want to delete " + training.activity.toLowerCase() + "?")) {
+            const status = await DatabaseAccessApi.deleteTrainingWithUrl(trainingUrl);
+            if (status !== false) {
+                // halpaa ja likasta kuin dissais puhevikasta...
+                await getTrainings();
+                handleSnackOpen("Deleted");
+            } else {
+                handleSnackOpen("Failed");
+            }
+        }
+    }
+
     const toggleFormOpen = () => {
         if (customer !== null) {
             setFormOpen(!formOpen);
         }
     }
 
-    const saveSuccess = () => {
+    const saveSuccess = async () => {
+        // edelleen halpaa ja likaista
+        await getTrainings();
         setFormOpen(false);
         handleSnackOpen("Training saved!");
-        getTrainings();
     }
 
     // for the snackbar
@@ -104,15 +123,17 @@ export default function TrainingList(props) {
         // { headerName: "Firstname", cellRenderer: function (params) { return params.data.customer.firstname }, sortable: false },
         // { headerName: "Lastname", cellRenderer: function (params) { return params.data.customer.lastname }, sortable: false },
         { headerName: "Activity", field: "activity" },
-        { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
+        // { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
+        { headerName: "Date", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.dateFormat); } },
         { headerName: "Duration", field: "duration" },
+        { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <CustomerButton id={params.data.customer.id} /> },
     ];
     const columnsWithoutNames = [
         { headerName: "Activity", field: "activity" },
-        { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
+        { headerName: "Date", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.dateFormat); } },
         { headerName: "Duration", field: "duration" },
+        { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <DeleteForeverIcon style={{ color: "red", cursor: "pointer" }} onClick={() => deleteTraining(params.data)} /> }
     ];
-
 
     if (loading) {
         return (
@@ -124,10 +145,11 @@ export default function TrainingList(props) {
         <>
             {typeof id !== 'undefined' && <CustomerInfo customer={customer} />}
             {typeof id !== 'undefined' && <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add training</Button>}
+            {typeof id === 'undefined' && <HelpButton content={helpContents.trainings} />}
             <div className="ag-theme-material" style={{ height: AgGridSettings.height, width: AgGridSettings.width, margin: "auto" }}>
                 <AgGridReact
                     defaultColDef={{
-                        flex: 1,
+                        flex: 3,
                         minWidth: AgGridSettings.colMinWidth,
                         sortable: true,
                         filter: true,
@@ -141,6 +163,7 @@ export default function TrainingList(props) {
                     rowData={trainings}
                     pagination={AgGridSettings.pagination}
                     paginationPageSize={AgGridSettings.paginationPageSize}
+                    paginationAutoPageSize={AgGridSettings.paginationAutoPageSize}
                 >
                 </AgGridReact>
                 {formOpen && <AddTraining customer={customer} closeMethod={toggleFormOpen} saveMethod={saveSuccess} />}
@@ -159,8 +182,8 @@ function CustomerInfo(props) {
             textAlign: AgGridSettings.aboveDivAlign,
             marginLeft: AgGridSettings.aboveDivMargin,
         }}>
-            <Link to="/customers" style={{ color: "blue" }}>back to customerlist</Link><br /><br />
-            <b>Customer:</b> {props.customer.firstname} {props.customer.lastname}
+            {/*<Link to="/customers" style={{ color: "blue" }}>back to customerlist</Link><br /><br />*/}
+            <div style={{ marginTop: "20px" }}><b>Customer:</b> {props.customer.firstname} {props.customer.lastname}</div>
         </div>
     )
 }

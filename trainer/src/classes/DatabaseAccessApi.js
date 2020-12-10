@@ -29,6 +29,11 @@ export class DatabaseAccessApi {
         return false;
     }
 
+    static async deleteCustomerWithUrl(url) {
+        const status = await InternalMethods.deleteData(url);
+        return status;
+    }
+
     static async getTrainings() {
         const responseJson = await InternalMethods.getData(databaseSettings.fullTrainingsUrl);
         return responseJson;
@@ -48,6 +53,11 @@ export class DatabaseAccessApi {
             return status;
         }
         return false;
+    }
+
+    static async deleteTrainingWithUrl(url) {
+        const status = await InternalMethods.deleteData(url);
+        return status;
     }
 
     // Used to reset the database if needed

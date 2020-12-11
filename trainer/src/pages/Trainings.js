@@ -127,12 +127,14 @@ export default function TrainingList(props) {
         { headerName: "Activity", field: "activity" },
         // { headerName: "Date", field: "date", cellRenderer: (data) => { return moment(data.date).format(AppSettings.dateFormat) } },
         { headerName: "Date", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.dateFormat); } },
+        { headerName: "Time", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.timeFormat); } },
         { headerName: "Duration", field: "duration" },
         { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <CustomerButton id={params.data.customer.id} /> },
     ];
     const columnsWithoutNames = [
         { headerName: "Activity", field: "activity" },
         { headerName: "Date", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.dateFormat); } },
+        { headerName: "Time", field: "date", cellRenderer: (params) => { return moment(params.data.date).format(AppSettings.timeFormat); } },
         { headerName: "Duration", field: "duration" },
         { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <DeleteForeverIcon style={{ color: "red", cursor: "pointer" }} onClick={() => deleteTraining(params.data)} /> }
     ];
@@ -145,7 +147,7 @@ export default function TrainingList(props) {
 
     return (
         <>
-            {customerId >= 0 && <CustomerInfo customer={customer} />}
+            {customerId >= 0 && <CustomerInfo customer={customer} id={customerId} />}
             {customerId >= 0 && <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add training</Button>}
             {customerId < 0 && <HelpButton content={helpContents.trainings} />}
             <div className="ag-theme-material" style={{ height: AgGridSettings.height, width: AgGridSettings.width, margin: "auto" }}>
@@ -185,7 +187,7 @@ function CustomerInfo(props) {
             marginLeft: AgGridSettings.aboveDivMargin,
         }}>
             {/*<Link to="/customers" style={{ color: "blue" }}>back to customerlist</Link><br /><br />*/}
-            <div style={{ marginTop: "20px" }}><b>Customer:</b> {props.customer.firstname} {props.customer.lastname}</div>
+            <div style={{ marginTop: "20px" }}><b>Customer:</b> {props.customer.firstname} {props.customer.lastname} (<Link to={`/customerstats/${props.id}`}>see stats</Link>) </div>
         </div>
     )
 }

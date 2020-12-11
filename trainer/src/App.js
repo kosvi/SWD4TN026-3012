@@ -13,7 +13,9 @@ import { drawerConfig } from "./config/drawerConfig.js";
 import Home from "./pages/Home.js";
 import CustomerList from "./pages/CustomerList.js";
 import TrainingList from "./pages/Trainings.js";
-import Customer from "./pages/Customer.js";
+import Customer, { CustomerStats } from "./pages/Customer.js";
+import TrainingCalendar from "./pages/Calendar.js";
+import Statistics from "./pages/Statistics.js";
 import About from "./pages/About.js";
 import { Error404 } from "./pages/Errors.js";
 
@@ -42,6 +44,8 @@ function App() {
     { path: "/", name: "Home" },
     { path: "/customers", name: "Customers" },
     { path: "/trainings", name: "Trainings" },
+    { path: "/calendar", name: "Calendar" },
+    { path: "/statistics", name: "Statistics" },
     { path: "/about", name: "About" },
   ];
 
@@ -56,7 +60,10 @@ function App() {
             <Route exact path="/"><Home /></Route>
             <Route path="/customers"><CustomerList /></Route>
             <Route path="/customer/:id"><Customer /></Route >
+            <Route path="/customerstats/:id"><CustomerStats /></Route>
             <Route path="/trainings"><TrainingList customer="-1" /></Route>
+            <Route path="/calendar"><TrainingCalendar /></Route>
+            <Route path="/statistics"><Statistics customer="-1" /></Route>
             <Route path="/about"><About /></Route>
             <Route><Error404 /></Route>
           </Switch>

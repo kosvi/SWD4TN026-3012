@@ -67,7 +67,7 @@ export class DatabaseAccessApi {
 
     // Used to reset the database if needed
     static async resetDatabase() {
-        const url = databaseSettings.baseUrl + "reset/";
+        const url = databaseSettings.baseUrl + "reset";
         await InternalMethods.postData(url, {});
     }
 
@@ -139,6 +139,7 @@ export class DatabaseObjectMethods {
 
     static Array = class {
 
+        // https://www.c-sharpcorner.com/UploadFile/fc34aa/sort-json-object-array-based-on-a-key-attribute-in-javascrip/
         static getSortOrder(property) {
             return function (a, b) {
                 if (a[property] > b[property]) {

@@ -1,7 +1,8 @@
 export const AppSettings = {
     // debugLevels: 0 = no logging, 1 = errors only, 2 = everything
-    debugLevel: 2,
+    debugLevel: 0,
     dateFormat: 'MMMM Do YYYY',
+    timeFormat: 'h:mm',
     materialVariant: "outlined",
 
     // Snack settings could be extracted to another file maybe(?)

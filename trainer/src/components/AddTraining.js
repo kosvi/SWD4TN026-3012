@@ -34,7 +34,6 @@ export default function AddTraining(props) {
         if (status === false) {
             return;
         }
-        console.log(status);
         props.saveMethod();
     }
 

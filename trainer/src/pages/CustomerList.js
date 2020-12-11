@@ -1,6 +1,5 @@
 // REACT
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 
 // AG-GRID
 import { AgGridReact } from "ag-grid-react";
@@ -10,7 +9,6 @@ import { AgGridSettings } from "../config/AgGridSettings.js";
 
 // MATERIAL-UI 
 import Button from "@material-ui/core/Button";
-import SearchIcon from '@material-ui/icons/Search';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Snackbar from "@material-ui/core/Snackbar";
 
@@ -24,7 +22,7 @@ import AddCustomer from "../components/AddCustomer.js";
 
 // APP LOGIC
 import { DatabaseAccessApi, DatabaseObjectMethods } from "../classes/DatabaseAccessApi.js";
-import { GridApi } from "ag-grid-community";
+//import { GridApi } from "ag-grid-community";
 import { snackBarSettings, snackBarStyle } from "../config/snackBarConfig.js";
 
 export default function CustomerList(props) {
@@ -108,6 +106,15 @@ export default function CustomerList(props) {
         handleSnackOpen("Customer saved!");
     }
 
+    const exportToCsv = () => {
+        const params = {
+            suppressQuotes: true,
+            skipHeader: false,
+            filename: "export.csv",
+        };
+        gridApi.exportDataAsCsv(params);
+    }
+
     // for the snackbar
     const handleClose = () => {
         setSnackOpen(false);
@@ -128,7 +135,7 @@ export default function CustomerList(props) {
         { headerName: "Email", field: "email", hide: !showContact },
         { headerName: "Phone", field: "phone", flex: 1, hide: !showContact },
         { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <CustomerButton id={DatabaseObjectMethods.Extract.customerIdFromCustomer(params.data)} /> },
-        { headerName: "", field: "", flex: 1, sotrable: false, filter: false, cellRendererFramework: params => <DeleteForeverIcon style={{ color: "red", cursor: "pointer" }} onClick={() => deleteCustomer(params.data)} /> },
+        { headerName: "", field: "", flex: 1, sortable: false, filter: false, cellRendererFramework: params => <DeleteForeverIcon style={{ color: "red", cursor: "pointer" }} onClick={() => deleteCustomer(params.data)} /> },
     ];
 
     if (loading) {
@@ -139,7 +146,8 @@ export default function CustomerList(props) {
 
     return (
         <>
-            <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add customer</Button>
+            <Button onClick={toggleFormOpen} variant={AppSettings.materialVariant}>Add customer</Button> &nbsp;
+            <Button onClick={exportToCsv} variant={AppSettings.materialVariant}>Export to CSV</Button>
             <HelpButton content={helpContents.customers} />
             <div className="ag-theme-material" style={{
                 textAlign: AgGridSettings.aboveDivAlign,

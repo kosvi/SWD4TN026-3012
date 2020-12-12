@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Personal trainer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a final task for Frontend -course at Haaga-Helia University of applied sciences. 
 
-## Available Scripts
+## Contents
 
-In the project directory, you can run:
+- [Introduction](#Introduction)
+- [Task 1](#Task-1)
+- [Task 2](#Task-2)
+- [Task 3](#Task-3)
+- [Bonus task](#Bonus-task)
+- [Final thoughts](#Final-thoughts)
 
-### `yarn start`
+## Introduction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The task was to create a frontend for personal trainer website. We were given documentation of the backend so we could get, post, put and delete customers and trainings from the database. Job was split into three tasks and some additional extra tasks for those aiming for grade 5. To put it simple: task was to create frontend using React (or Vue). 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Task 1
 
-### `yarn test`
+### Assignment
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+First task was to create pages that list customers and trainings from the database. It had to include ability to sort and search. 
 
-### `yarn build`
+### Screenshots
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Image | Description |
+|------|-------------|
+| [Customerlist 1](screenshots/task1_customerlist1.png) | List of customers and all of their information |
+| [Customerlist 2](screenshots/task1_customerlist2.png) | List of customers without address information |
+| [Customerlist 3](screenshots/task1_customerlist3.png) | List of customers where search and sort is used |
+| [Traininglist 1](screenshots/task1_traininglist1.png) | List of all trainings of all customers |
+| [Traininglist 2](screenshots/task1_traininglist2.png) | List of trainings of a single customer |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Task 2
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Assignment
 
-### `yarn eject`
+In addition to listing all customers and trainings, we needed CRUD functions. Now we needed to include ability to add, edit and delete customers and to add and delete trainings. Deleting had to ask for confirmation! 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Screenshots
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Image | Description |
+|------ | -------     |
+| [Add customer](screenshots/task2_addcustomer.png) | Form where a customer can be added |
+| [Edit customer 1](screenshots/task2_customeredit.png) | Changing the lastname of a customer |
+| [Edit customer 2](screenshots/task2_customeredit2.png) | New lastname saved |
+| [Add training](screenshots/task2_addtraining.png) | Form where a training can be added |
+| [Delete training](screenshots/task2_deletetraining.png) | Confirmation question for deleting a training |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Task 3
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Assignment
 
-## Learn More
+In addition to tasks 1&2 the site needed a calendar that would show all trainings in monthly, weekly and daily views. Plus the app needed to be deployed to some cloud server. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Screenshots
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Image | Description |
+|------ | -------     |
+| [Calendar](screenshots/task3_calendar.png) | Calendar in week view with trainings |
 
-### Code Splitting
+## Bonus task
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Assignment
 
-### Analyzing the Bundle Size
+In addition to all previous tasks we needed to add statistics page that creates graph of time spend on different training activities by customers. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Screenshots
 
-### Making a Progressive Web App
+| Image | Description |
+|------| ----------- |
+| [All customers](screenshots/bonus_allcustomers.png) | Statistics of all trainings of all customers drawn to graph |
+| [Single customer](screenshots/bonus_singlecustomer.png) | Statistics of a single customers training drawn to graph |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Final thoughts
 
-### Advanced Configuration
+This was a really fun assignment. I was so concentrated when writing this React app of mine and if I wouldn't have a ton of other exercises to do, I would be sad that this was done in so little time. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+I must admit that since I am new to tech and programming, it's still hard for me to get a grasp of the app as a whole. This was a good teaching of how important good planning is. I started to write before having a good plan and because of that I have more or less technical debt in my sourcecode. For example as simple thing as config folder: it includes configs and settings (and even styles!). What is that! Also my DatabaseAccessApi.js is a bit of a mess since I started writing it before I had a clear understanding of what I needed from it. Still I am satisfied and overall I consider this a good app considering that this is my first React app. 
 
-### Deployment
+Oh, and the app is deployed at: [https://www.roskakori.net/trainer](https://www.roskakori.net/trainer)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

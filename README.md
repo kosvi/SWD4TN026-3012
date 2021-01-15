@@ -22,3 +22,8 @@
   - [x] [E23](/todoteststarter) Clear todos
 - Carshop Front End
   - [x] [Carshop front end](/carshop) 
+
+## Final task
+
+- [Repository](/trainer) / [README](/trainer/README.md) Personal trainer
+
